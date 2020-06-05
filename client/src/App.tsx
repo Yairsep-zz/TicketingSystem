@@ -97,6 +97,19 @@ export class App extends React.PureComponent<{}, AppState> {
 
     onSearch = async (val: string, newPage?: number) => {
 
+        // if (val.includes("after:")){
+        //     const date = val.slice(7, 17);
+        //     const searchWord = val.slice(17, val.length);
+        // }
+        // if (val.includes("before:")){
+        //     const date = val.slice(7, 17);
+        //     const searchWord = val.slice(17, val.length);
+        // }
+        //
+        // if (val.includes("from:")){
+        //     const email = val.slice(5, val.length);
+        // }
+
         clearTimeout(this.searchDebounce);
 
         this.searchDebounce = setTimeout(async () => {
@@ -114,7 +127,10 @@ export class App extends React.PureComponent<{}, AppState> {
             <header>
                 <input type="search" placeholder="Search..." onChange={(e) => this.onSearch(e.target.value)}/>
             </header>
-            {tickets ? <div className='results'>Showing {tickets.length - this.state.hiddenCount} results {this.state.hiddenCount > 0 ? <text>({this.state.hiddenCount} hidden tickets - <a onClick={() => this.restore()}>restore</a>)</text>  : null}
+
+            {tickets ? <div className='results'>Showing {tickets.length - this.state.hiddenCount} results {this.state.hiddenCount > 0 ?
+                <text>({this.state.hiddenCount} hidden tickets - <a onClick={() => this.restore()}>restore</a>)</text>
+                : null}
             </div> : null}
 
             {tickets ? this.renderTickets(tickets) : <h2>Loading..</h2>}
