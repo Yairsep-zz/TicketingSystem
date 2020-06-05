@@ -1,8 +1,7 @@
 import React from 'react';
 import './App.scss';
 import {createApiClient, Ticket} from './api';
-// import Button from 'react-bootstrap/Button';
-// import 'bootstrap/dist/css/bootstrap.min.css';
+import Star from './Components/Star'
 
 export type AppState = {
     tickets?: Ticket[],
@@ -45,7 +44,8 @@ export class App extends React.PureComponent<{}, AppState> {
     renderTickets = (tickets: Ticket[]) => {
 
         const filteredTickets = tickets
-            .filter((t) => (t.title.toLowerCase() + t.content.toLowerCase()).includes(this.state.search.toLowerCase()) && !t.hidden);
+            .filter((t) => (t.title.toLowerCase() + t.content.toLowerCase() + t.userEmail.toLowerCase()).includes(this.state.search.toLowerCase()) &&
+                !t.hidden);
 
         const hideTicket = (ticket : any) =>{
             ticket.hidden = true;
@@ -77,18 +77,19 @@ export class App extends React.PureComponent<{}, AppState> {
         return (<ul className='tickets'>
             {filteredTickets.map((ticket) => (!ticket.hidden ? <li key={ticket.id} className='ticket' onMouseOver={() => displayHide(ticket)} onMouseLeave={() => unDisplayHide(ticket)}>
 
-                <div className='hideButton'><text>{ticket.displayHide ? <a className="hideButton" onClick={() => hideTicket(ticket)}>Hide</a> : null}</text></div>
+                <div className='hideButton'><text><Star/>{ticket.displayHide ? <a className="hideButton" onClick={() => hideTicket(ticket)}>Hide</a> : null}</text></div>
                 <h5 className='title'>{ticket.title}</h5>
 
 
-                {ticket.content.length < 350 ? <p>{ticket.content}</p> :
+
+                {ticket.content.length < 382 ? <p>{ticket.content}</p> :
                     !ticket.extendText ? <p>{ticket.content.slice(0,350)}
                     <div><a className="showMore" onClick={() => seeMore(ticket)}>See More</a></div></p> :
                         <p>{ticket.content}<div><a className="showLess" onClick={() => seeLess(ticket)}>See less</a></div></p>}
 
                 {/*<button>👍</button>*/}
                 {/*<button>👎</button>*/}
-                <p> {ticket.labels! ? ticket.labels!.map((label) => (<text className='ticketLabels'>{label} </text>)) : null}</p>
+                <p> {ticket.labels! ? ticket.labels!.map((label) => (<text className='ticketLabels'>{label}</text>)) : null}</p>
 
                 <footer>
                     <div className='meta-data'>By {ticket.userEmail} | {new Date(ticket.creationTime).toLocaleString()}</div>
@@ -97,26 +98,52 @@ export class App extends React.PureComponent<{}, AppState> {
 
     onSearch = async (val: string, newPage?: number) => {
 
-        // if (val.includes("after:")){
-        //     const date = val.slice(7, 17);
-        //     const searchWord = val.slice(17, val.length);
-        // }
-        // if (val.includes("before:")){
-        //     const date = val.slice(7, 17);
-        //     const searchWord = val.slice(17, val.length);
-        // }
-        //
-        // if (val.includes("from:")){
-        //     const email = val.slice(5, val.length);
-        // }
+        if (val.includes("after:")){
+            const date = val.slice(6, 16);
+            const searchWord = val.slice(17, val.length);
 
-        clearTimeout(this.searchDebounce);
+            clearTimeout(this.searchDebounce);
 
-        this.searchDebounce = setTimeout(async () => {
-            this.setState({
-                search: val
-            });
-        }, 300);
+            this.searchDebounce = setTimeout(async () => {
+                this.setState({
+                    search: searchWord
+                });
+            }, 300);
+        }
+
+        if (val.includes("before:")){
+            const date = val.slice(7, 17);
+            const searchWord = val.slice(18, val.length);
+
+            clearTimeout(this.searchDebounce);
+
+            this.searchDebounce = setTimeout(async () => {
+                this.setState({
+                    search: searchWord
+                });
+            }, 300);
+        }
+
+        if (val.includes("from:")){
+            const email = val.slice(5, val.length);
+
+            clearTimeout(this.searchDebounce);
+
+            this.searchDebounce = setTimeout(async () => {
+                this.setState({
+                    search: email
+                });
+            }, 300);
+        }
+        else {
+            clearTimeout(this.searchDebounce);
+
+            this.searchDebounce = setTimeout(async () => {
+                this.setState({
+                    search: val
+                });
+            }, 300);
+        }
     }
 
     render() {
