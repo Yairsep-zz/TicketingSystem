@@ -94,7 +94,11 @@ body {
 
 				display: flex;
 				justify-content: space-between;
-				
+
+				.ticketLables{
+					color: #7a92a5;
+					border: 1px solid #00efff;
+				}
 				.meta-data {
 					color: #7a92a5;
 					font-size: 12px;

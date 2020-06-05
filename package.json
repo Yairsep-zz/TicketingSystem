@@ -14,5 +14,8 @@
   "license": "ISC",
   "devDependencies": {
     "lerna": "^3.13.1"
+  },
+  "dependencies": {
+    "wix-style-react": "^8.15.1"
   }
 }
