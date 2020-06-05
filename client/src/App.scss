@@ -82,6 +82,11 @@ body {
 				box-shadow: 0 2px 6px 1px #d3d7da;
 			}
 
+			.hideButton{
+				float: right;
+				color: #20455e;
+			}
+
 			.title {
 				margin: 15px 0;
 				font-size: 16px;
@@ -89,16 +94,20 @@ body {
 				font-style: normal;
 				color: #20455e;
 			}
+
+			.ticketLabels{
+				border-color: #19191c;
+				border-radius: 1px;
+				color: #153040;
+				background: #83b1e5;
+			}
 			
 			footer {
 
 				display: flex;
 				justify-content: space-between;
 
-				.ticketLables{
-					color: #7a92a5;
-					border: 1px solid #00efff;
-				}
+
 				.meta-data {
 					color: #7a92a5;
 					font-size: 12px;

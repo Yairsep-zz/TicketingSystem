@@ -63,12 +63,24 @@ export class App extends React.PureComponent<{}, AppState> {
             this.setState({tickets:[...tickets]})
         }
 
-        return (<ul className='tickets'>
-            {filteredTickets.map((ticket) => (!ticket.hidden ? <li key={ticket.id} className='ticket'>
-                {/*<button className="hideButton" onClick={() => this.hideTicket2(ticket)}>Hide</button>*/}
+        const displayHide = (ticket : any) =>{
+            ticket.displayHide = true;
+            this.setState({tickets:[...tickets]})
+        }
 
+        const unDisplayHide = (ticket : any) =>{
+            ticket.displayHide = false;
+            this.setState({tickets:[...tickets]})
+        }
+
+
+        return (<ul className='tickets'>
+            {filteredTickets.map((ticket) => (!ticket.hidden ? <li key={ticket.id} className='ticket' onMouseOver={() => displayHide(ticket)} onMouseLeave={() => unDisplayHide(ticket)}>
+
+                <div className='hideButton'><text>{ticket.displayHide ? <a className="hideButton" onClick={() => hideTicket(ticket)}>Hide</a> : null}</text></div>
                 <h5 className='title'>{ticket.title}</h5>
-                <text><a className="hideButton" onClick={() => hideTicket(ticket)}>Hide</a></text>
+
+
                 {ticket.content.length < 350 ? <p>{ticket.content}</p> :
                     !ticket.extendText ? <p>{ticket.content.slice(0,350)}
                     <div><a className="showMore" onClick={() => seeMore(ticket)}>See More</a></div></p> :
@@ -76,9 +88,9 @@ export class App extends React.PureComponent<{}, AppState> {
 
                 {/*<button>👍</button>*/}
                 {/*<button>👎</button>*/}
+                <p> {ticket.labels! ? ticket.labels!.map((label) => (<text className='ticketLabels'>{label} </text>)) : null}</p>
 
                 <footer>
-                    <div className='ticketLables'>{ticket.labels}</div>
                     <div className='meta-data'>By {ticket.userEmail} | {new Date(ticket.creationTime).toLocaleString()}</div>
                 </footer></li> : null))}</ul>);
     }
