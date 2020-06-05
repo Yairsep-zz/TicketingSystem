@@ -1,6 +1,8 @@
 import React from 'react';
 import './App.scss';
 import {createApiClient, Ticket} from './api';
+// import Button from 'react-bootstrap/Button';
+// import 'bootstrap/dist/css/bootstrap.min.css';
 
 export type AppState = {
     tickets?: Ticket[],
@@ -51,28 +53,26 @@ export class App extends React.PureComponent<{}, AppState> {
             this.setState({hiddenCount: this.state.hiddenCount +1})
         }
 
-        const showMore = (ticket : any) =>{
+        const seeMore = (ticket : any) =>{
             ticket.extendText = true;
             this.setState({tickets:[...tickets]})
         }
 
-        const showLess = (ticket : any) =>{
+        const seeLess = (ticket : any) =>{
             ticket.extendText = false;
             this.setState({tickets:[...tickets]})
         }
 
         return (<ul className='tickets'>
             {filteredTickets.map((ticket) => (!ticket.hidden ? <li key={ticket.id} className='ticket'>
-                <button className="hideButton" onClick={() => hideTicket(ticket)}>Hide</button>
-
                 {/*<button className="hideButton" onClick={() => this.hideTicket2(ticket)}>Hide</button>*/}
 
                 <h5 className='title'>{ticket.title}</h5>
-
+                <text><a className="hideButton" onClick={() => hideTicket(ticket)}>Hide</a></text>
                 {ticket.content.length < 350 ? <p>{ticket.content}</p> :
                     !ticket.extendText ? <p>{ticket.content.slice(0,350)}
-                    <button className="showMore" onClick={() => showMore(ticket)}>...Show More</button></p> :
-                        <p>{ticket.content}<div><button className="showLess" onClick={() => showLess(ticket)}>Show less</button></div></p>}
+                    <div><a className="showMore" onClick={() => seeMore(ticket)}>See More</a></div></p> :
+                        <p>{ticket.content}<div><a className="showLess" onClick={() => seeLess(ticket)}>See less</a></div></p>}
 
                 {/*<button>👍</button>*/}
                 {/*<button>👎</button>*/}
@@ -102,9 +102,7 @@ export class App extends React.PureComponent<{}, AppState> {
             <header>
                 <input type="search" placeholder="Search..." onChange={(e) => this.onSearch(e.target.value)}/>
             </header>
-
-            {tickets ? <div className='results'>Showing {tickets.length - this.state.hiddenCount} results
-                {this.state.hiddenCount > 0 ? <div>({this.state.hiddenCount} hidden tickets <button onClick={() => this.restore()}>restore</button>)</div>  : null}
+            {tickets ? <div className='results'>Showing {tickets.length - this.state.hiddenCount} results {this.state.hiddenCount > 0 ? <text>({this.state.hiddenCount} hidden tickets - <a onClick={() => this.restore()}>restore</a>)</text>  : null}
             </div> : null}
 
             {tickets ? this.renderTickets(tickets) : <h2>Loading..</h2>}
