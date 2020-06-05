@@ -8,6 +8,7 @@ export type Ticket = {
 	userEmail: string;
 	labels?: string[];
 	hidden: boolean;
+	extendText: boolean;
 }
 
 export type ApiClient = {

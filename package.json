@@ -16,6 +16,8 @@
     "lerna": "^3.13.1"
   },
   "dependencies": {
+    "react-lines-ellipsis": "^0.14.1",
+    "react-text-truncate": "^0.16.0",
     "wix-style-react": "^8.15.1"
   }
 }
