@@ -15,6 +15,7 @@ function Star(){
 
     return (<div className='star' >
         {!status ? <p onClick={() => setFavourite()}><BsStar color='black' size='1rem'/></p> : <p onClick={() => unFavourite()}><BsFillStarFill color='yellow' size='1rem'/></p>}
+
     </div>)
 }
 

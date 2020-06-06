@@ -7,6 +7,7 @@ export type AppState = {
     tickets?: Ticket[],
     search: string;
     hiddenCount: number
+    pageNumber: number;
 }
 
 const api = createApiClient()
@@ -14,9 +15,11 @@ let originalTickets = null;
 
 export class App extends React.PureComponent<{}, AppState> {
 
+
     state: AppState = {
         search: '',
-        hiddenCount: 0
+        hiddenCount: 0,
+        pageNumber: 1
     }
 
     searchDebounce: any = null;
@@ -73,14 +76,20 @@ export class App extends React.PureComponent<{}, AppState> {
             this.setState({tickets:[...tickets]})
         }
 
-        const setFavourite = (ticket : any) =>{
-            ticket.favourite = true;
-            this.setState({tickets:[...tickets]})
+        const longTicket = (ticket : any) =>{
+            const lines = ticket.content.split(/\r\n|\r|\n/)
+            if (lines.length > 3){
+                return true
+            }
+            else{
+                return false
+            }
         }
 
-        const unFavourite = (ticket : any) =>{
-            ticket.favourite = false;
-            this.setState({tickets:[...tickets]})
+        const shortContent = (ticket : any) =>{
+            const lines = ticket.content.split(/\r\n|\r|\n/)
+            const maxlength = ticket.content
+            return ticket.content.slice(0 , 500)
         }
 
         return (<ul className='tickets'>
@@ -91,15 +100,12 @@ export class App extends React.PureComponent<{}, AppState> {
                 <Star/>
                 <h5 className='title'>{ticket.title}</h5>
 
+                {!longTicket(ticket) ? <p>{ticket.content}</p> : longTicket(ticket) && !ticket.extendText
+                    ? <p>{shortContent(ticket)}<div><a className="showMore" onClick={() => seeMore(ticket)}>See More</a></div></p>
+                    : <p>{ticket.content}<div><a className="showLess" onClick={() => seeLess(ticket)}>See less</a></div></p>}
 
-
-                {ticket.content.length < 382 ? <p>{ticket.content}</p> :
-                    !ticket.extendText ? <p>{ticket.content.slice(0,350)}
-                    <div><a className="showMore" onClick={() => seeMore(ticket)}>See More</a></div></p> :
-                        <p>{ticket.content}<div><a className="showLess" onClick={() => seeLess(ticket)}>See less</a></div></p>}
-
-                {/*<button>👍</button>*/}
-                {/*<button>👎</button>*/}
+                {/*/!*<button>👍</button>*!/*/}
+                {/*/!*<button>👎</button>*!/*/}
                 <p> {ticket.labels! ? ticket.labels!.map((label) => (<text className='ticketLabels'>{label}</text>)) : null}</p>
 
                 <footer>

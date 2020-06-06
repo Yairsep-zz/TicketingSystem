@@ -21,6 +21,8 @@ export const createApiClient = (): ApiClient => {
 	return {
 		getTickets: () => {
 			return axios.get(`http://localhost:3232/api/tickets`).then((res) => res.data);
+
+			// axios({method: 'GET', url: 'http://localhost:3232/api/tickets', params: {page: pageNumber}}).then((res) => res.data);
 		}
 	}
 }
