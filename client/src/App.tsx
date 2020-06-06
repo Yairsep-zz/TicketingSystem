@@ -2,6 +2,7 @@ import React from 'react';
 import './App.scss';
 import {createApiClient, Ticket} from './api';
 import Star from './Components/Star'
+import { BsStar , BsFillStarFill} from "react-icons/bs";
 
 export type AppState = {
     tickets?: Ticket[],
@@ -73,11 +74,22 @@ export class App extends React.PureComponent<{}, AppState> {
             this.setState({tickets:[...tickets]})
         }
 
+        const setFavourite = (ticket : any) =>{
+            ticket.favourite = true;
+            this.setState({tickets:[...tickets]})
+        }
+
+        const unFavourite = (ticket : any) =>{
+            ticket.favourite = false;
+            this.setState({tickets:[...tickets]})
+        }
 
         return (<ul className='tickets'>
             {filteredTickets.map((ticket) => (!ticket.hidden ? <li key={ticket.id} className='ticket' onMouseOver={() => displayHide(ticket)} onMouseLeave={() => unDisplayHide(ticket)}>
 
-                <div className='hideButton'><text><Star/>{ticket.displayHide ? <a className="hideButton" onClick={() => hideTicket(ticket)}>Hide</a> : null}</text></div>
+                <div className='hideButton'><text>{ticket.displayHide ? <a className="hideButton" onClick={() => hideTicket(ticket)}>Hide</a> : null}</text></div>
+                {/*<div className='star'> {!ticket.favourite ? <text onClick={() => setFavourite(ticket)}><BsStar color='black' size='1rem'/></text> : <text onClick={() => unFavourite(ticket)}><BsFillStarFill color='yellow' size='1rem'/></text>}</div>*/}
+                <Star/>
                 <h5 className='title'>{ticket.title}</h5>
 
 

@@ -10,6 +10,7 @@ export type Ticket = {
 	displayHide: boolean;
 	hidden: boolean;
 	extendText: boolean;
+	favourite: boolean;
 }
 
 export type ApiClient = {

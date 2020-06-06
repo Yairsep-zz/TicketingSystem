@@ -37,7 +37,8 @@
         "title": "How to Display Numbers with a Comma Separator",
         "content": "Hey Guys, \n\nStruggling with understanding how to get my code to display commas. While I know its been attempted to be answered before my situation is a bit unique I think. \n\nIn my my database I have both text and numbers (different columns). The numbers are inputted as 0000.00, but displayed with a comma within the database. When I tried to use this code: \n \n$w.onReady(function () {\n\n  $w(\"#dataset1\").onReady(() => {\n var number = Number($w(\"#table1\").text);\n    $w(\"#totalDealValue\").text = number.toLocaleString();\n\n  });\n\n});\n\nIt stated \"text does not exist for table1\" and \"totalDealValue is not a valid selector\"\n\nI'm not sure how to select a particular column within the dataset to display the information within the column with a comma. \n\nany help would be appreciated. Still learning to code!\n\nBest,\nGabe",
         "userEmail": "co@ac.na",
-        "creationTime": 1514870853599
+        "creationTime": 1514870853599,
+        "labels": ["Corvid", "Api"]
     },
     {
         "id": "b52ad1dc-937b-54c3-81e9-2d433dd96bf6",
