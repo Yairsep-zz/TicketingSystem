@@ -2,7 +2,6 @@ import React from 'react';
 import './App.scss';
 import {createApiClient, Ticket} from './api';
 import Star from './Components/Star'
-import { BsStar , BsFillStarFill} from "react-icons/bs";
 
 export type AppState = {
     tickets?: Ticket[],
