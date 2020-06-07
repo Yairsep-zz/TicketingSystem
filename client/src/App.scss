@@ -63,7 +63,15 @@ body {
 
 		margin: 0;
 		padding: 0;
-
+		
+		// .content{
+		// 	overflow: hidden;
+		// 	text-overflow: ellipsis;
+		// 	display: -webkit-box;
+		// 	-webkit-line-clamp: 3;
+		// 	-webkit-box-orient: vertical;
+		// }
+		
 		.ticket {
 			width: 100%;
 			flex-shrink: 0;
@@ -77,6 +85,8 @@ body {
 			padding: 10px 20px;
 			transition: box-shadow .2s ease-in-out;
 			position: relative;
+
+			
 
 			&:hover {
 				box-shadow: 0 2px 6px 1px #d3d7da;
