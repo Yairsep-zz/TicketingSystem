@@ -109,26 +109,38 @@ export class App extends React.PureComponent<{}, AppState> {
         console.log(event.target)
     }
     onSearch = async (val: string, newPage?: number) => {
-
+        if (val.startsWith("after:")){
+            const date = val.slice(6,16)
+            const searchWord = val.slice(16, val.length)
+            console.log(date)
+            console.log(searchWord)
+            const email=undefined;
+            // const tickets = await api.getTickets(1 , searchWord , date, email);
+        }
+        else if (val.startsWith("before:")){
+            const date = val.slice(7,17)
+            const searchWord = val.slice(17, val.length)
+            console.log(date)
+            console.log(searchWord)
+            const email = undefined;
+            // const tickets = await api.getTickets(1 , searchWord , date , email);
+        }
+        else if (val.startsWith("from:")){
+            const email = val.slice(5,val.length)
+            console.log(email)
+            const date = undefined;
+            // const tickets = await api.getTickets(1 , email , date , email);
+        }
+        this.setState({search: val});
         const tickets = await api.getTickets(1 , this.state.search);
+        console.log(this.state.search)
         this.setState({
             tickets: tickets,
-            search: val,
             pageNumber: 1
         });
-        console.log(tickets)
-
-
-        // this.searchDebounce = setTimeout(async () => {
-        //     this.setState({
-        //         tickets: tickets,
-        //         search: val
-        //     });
-        // }, 300);
     }
 
     loadMore = async () =>{
-        console.log("asdfasdasd")
         const tickets = await api.getTickets(this.state.pageNumber + 1 , this.state.search);
         this.setState({
             tickets: [...this.state.tickets, ...tickets],

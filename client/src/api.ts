@@ -23,7 +23,6 @@ export const createApiClient = (): ApiClient => {
 			const pageNum = pageNumber.toString();
 			const search = searchWord.toLowerCase();
 			const tempString = "http://localhost:3232/api/tickets?page="+pageNum+"&search="+search;
-			console.log(pageNum, searchWord)
 			return axios.get(tempString).then((res) => res.data);
 		}
 	}
