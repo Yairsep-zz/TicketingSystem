@@ -20,42 +20,32 @@ app.use((_, res, next) => {
 app.get('/api/tickets', (req, res) => {
 
 	const page = req.query.page || 1;
-	const query = req.query.query
-	const search_Word = req.query.search_Word
-	const date = req.query.date
-	const email = req.query.email_
-	console.log("page:" +page)
-	console.log("query:" +query)
-	console.log("search_Word:" + search_Word)
-	console.log("date:" + date)
-	console.log("email:" + email)
-	// console.log("page:", page)
-	console.log("date:" , 1542111235544)
-	console.log("query date:", new Date(date).getMilliseconds());
-	console.log(1542111235544 < (new Date(date)).getMilliseconds())
-	// console.log("search:", search)
-	var FilteredData = tempData
-	if (query === "before:"){
-		FilteredData = FilteredData.filter((t) => (t.creationTime <= new Date(date).getTime() && (t.title.toLowerCase().includes(search_Word.toLowerCase()) || (t.content.toLowerCase().includes(search_Word.toLowerCase())))));
-	}
-	else if (query === "after:"){
-		FilteredData = FilteredData.filter((t) => (t.creationTime > new Date(date).getTime() && (t.title.toLowerCase().includes(search_Word.toLowerCase()) || (t.content.toLowerCase().includes(search_Word.toLowerCase())))));
-	}
+	const query = req.query.SearchQuery;
+	const hasMoreData = false;
+	let FilteredData = tempData;
 
-	else if (query === "from:"){
-		console.log(email)
-		FilteredData = FilteredData.filter((t) => (t.userEmail.toLowerCase().includes(email.toLowerCase())));
-		console.log(FilteredData)
+	if (query.startsWith("after:")){
+		const date = query.slice(6,16)
+		const searchWord = query.slice(17, query.length)
+		FilteredData = FilteredData.filter((t) => (t.creationTime > new Date(date).getTime() && (t.title.toLowerCase().includes(searchWord.toLowerCase()) || (t.content.toLowerCase().includes(searchWord.toLowerCase())))));
 	}
-	else if (search_Word !==""){
-		FilteredData = FilteredData.filter((t) => ((t.title.toLowerCase().includes(search_Word.toLowerCase()) || (t.content.toLowerCase().includes(search_Word.toLowerCase())))));
+	else if (query.startsWith("before:")){
+		const date = query.slice(7,17)
+		const searchWord = query.slice(18, query.length)
+		FilteredData = FilteredData.filter((t) => (t.creationTime < new Date(date).getTime() && (t.title.toLowerCase().includes(searchWord.toLowerCase()) || (t.content.toLowerCase().includes(searchWord.toLowerCase())))));
+
+	}
+	else if (query.startsWith("from:")){
+		const email = query.slice(5,query.length)
+		FilteredData = FilteredData.filter((t) => (t.userEmail.toLowerCase().includes(email.toLowerCase())));
+	}
+	else if (query !==""){
+		FilteredData = FilteredData.filter((t) => ((t.title.toLowerCase().includes(query.toLowerCase()) || (t.content.toLowerCase().includes(query.toLowerCase())))));
 		// console.log("Not undifined", FilteredData)
 	}
 	FilteredData = FilteredData.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
-	// const paginatedData = searchFilteredData.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
-	// console.log(paginatedData.length)
-	// console.log(tempData.length)
 	res.send(FilteredData);
+
 });
 
 app.listen(PORT);

@@ -8,10 +8,6 @@ export type AppState = {
     search: string,
     hiddenCount: number,
     pageNumber: number,
-    searchQuery: string,
-    date: string,
-    searchWord: string,
-    email: string;
 }
 
 const api = createApiClient()
@@ -23,10 +19,6 @@ export class App extends React.PureComponent<{}, AppState> {
         hiddenCount: 0,
         pageNumber: 1,
         tickets: [],
-        searchQuery: '',
-        date: '',
-        searchWord: '',
-        email: '',
     }
 
     searchDebounce: any = null;
@@ -34,7 +26,7 @@ export class App extends React.PureComponent<{}, AppState> {
     async componentDidMount() {
         this.setState({
             hiddenCount: 0,
-            tickets: await api.getTickets(this.state.pageNumber , this.state.search , "","" , "")
+            tickets: await api.getTickets(this.state.pageNumber , this.state.search)
         });
     }
 
@@ -120,49 +112,8 @@ export class App extends React.PureComponent<{}, AppState> {
     onSearch = async (val: string, newPage?: number) => {
 
         this.setState({search: val});
-        let searchQuery = undefined;
-        let date = undefined;
-        let searchWord = undefined;
-        let email = undefined;
-        let tickets = undefined;
-        if (val.startsWith("after:")){
-            searchQuery = "after:"
-            date = val.slice(6,16)
-            searchWord = val.slice(17, val.length)
-            email = "";
-            this.setState({searchQuery: searchQuery, searchWord: searchWord, date: date, email: email});
-            console.log(date)
-            console.log(searchWord)
-            tickets = await api.getTickets(1 , searchQuery ,searchWord, date, email);
-        }
-        else if (val.startsWith("before:")){
-            searchQuery = "before:"
-            date = val.slice(7,17)
-            searchWord = val.slice(18, val.length)
-            email = "";
-            this.setState({searchQuery: searchQuery, searchWord: searchWord, date: date, email: email});
-            console.log(date)
-            console.log(searchWord)
-            tickets = await api.getTickets(1 , searchQuery ,searchWord, date, email);
-        }
-        else if (val.startsWith("from:")){
-            searchQuery = "from:"
-            email = val.slice(5,val.length)
-            searchWord = "";
-            date = "";
-            this.setState({searchQuery: searchQuery, searchWord: searchWord, date: date, email: email});
-            console.log(email)
-            tickets = await api.getTickets(1 , searchQuery ,searchWord, date, email);
-        }
-        else {
-            searchQuery = ""
-            email = ""
-            searchWord = val
-            date = "";
-            this.setState({searchQuery: searchQuery, searchWord: searchWord, date: date, email: email});
-            tickets = await api.getTickets(1 , searchQuery ,searchWord, date, email);
-            console.log(this.state.search)
-        }
+        const tickets = await api.getTickets(1 ,val);
+        console.log(this.state.search)
         this.setState({
             hiddenCount: 0,
             tickets: tickets,
@@ -171,13 +122,8 @@ export class App extends React.PureComponent<{}, AppState> {
     }
 
     loadMore = async () =>{
-        let tickets = undefined;
-        if (this.state.searchQuery === ""){
-            tickets = await api.getTickets(this.state.pageNumber + 1 , this.state.search ,this.state.searchWord, this.state.date , this.state.email);
-        }
-        else {
-            tickets = await api.getTickets(this.state.pageNumber + 1, this.state.searchQuery, this.state.searchWord, this.state.date , this.state.email);
-        }
+
+        const tickets = await api.getTickets(this.state.pageNumber + 1, this.state.search);
         this.setState({
             tickets: [...this.state.tickets, ...tickets],
             hiddenCount: 0,
