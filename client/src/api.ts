@@ -14,16 +14,19 @@ export type Ticket = {
 }
 
 export type ApiClient = {
-	getTickets: (pageNumber:number, searchWord: string) => Promise<Ticket[]>;
+	getTickets: (pageNumber:number, searchQuery: string , searchWord: string , date: string , email: string) => Promise<Ticket[]>;
 }
 
 export const createApiClient = (): ApiClient => {
 	return {
-		getTickets: (pageNumber:number, searchWord: string) => {
+		getTickets: (pageNumber:number, searchQuery: string , searchWord: string , date: string , email: string) => {
 			const pageNum = pageNumber.toString();
-			const search = searchWord.toLowerCase();
-			const tempString = "http://localhost:3232/api/tickets?page="+pageNum+"&search="+search;
-			return axios.get(tempString).then((res) => res.data);
+			const query = searchQuery.toLowerCase();
+			const search_Word = searchWord.toString();
+			const date_ = date.toLowerCase();
+			const email_ = email.toLowerCase();
+			const queryString = "http://localhost:3232/api/tickets" + "?page="+pageNum+ "&query="+query + "&search_Word="+search_Word + "&date="+date_ +"&email_="+email_;
+			return axios.get(queryString).then((res) => res.data);
 		}
 	}
 }
