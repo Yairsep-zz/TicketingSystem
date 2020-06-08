@@ -5,9 +5,13 @@ import Star from './Components/Star'
 
 export type AppState = {
     tickets: Ticket[],
-    search: string;
-    hiddenCount: number;
-    pageNumber: number;
+    search: string,
+    hiddenCount: number,
+    pageNumber: number,
+    searchQuery: string,
+    date: string,
+    searchWord: string,
+    email: string;
 }
 
 const api = createApiClient()
@@ -18,7 +22,11 @@ export class App extends React.PureComponent<{}, AppState> {
         search: '',
         hiddenCount: 0,
         pageNumber: 1,
-        tickets: []
+        tickets: [],
+        searchQuery: '',
+        date: '',
+        searchWord: '',
+        email: '',
     }
 
     searchDebounce: any = null;
@@ -122,6 +130,7 @@ export class App extends React.PureComponent<{}, AppState> {
             date = val.slice(6,16)
             searchWord = val.slice(17, val.length)
             email = "";
+            this.setState({searchQuery: searchQuery, searchWord: searchWord, date: date, email: email});
             console.log(date)
             console.log(searchWord)
             tickets = await api.getTickets(1 , searchQuery ,searchWord, date, email);
@@ -131,6 +140,7 @@ export class App extends React.PureComponent<{}, AppState> {
             date = val.slice(7,17)
             searchWord = val.slice(18, val.length)
             email = "";
+            this.setState({searchQuery: searchQuery, searchWord: searchWord, date: date, email: email});
             console.log(date)
             console.log(searchWord)
             tickets = await api.getTickets(1 , searchQuery ,searchWord, date, email);
@@ -140,6 +150,7 @@ export class App extends React.PureComponent<{}, AppState> {
             email = val.slice(5,val.length)
             searchWord = "";
             date = "";
+            this.setState({searchQuery: searchQuery, searchWord: searchWord, date: date, email: email});
             console.log(email)
             tickets = await api.getTickets(1 , searchQuery ,searchWord, date, email);
         }
@@ -148,6 +159,7 @@ export class App extends React.PureComponent<{}, AppState> {
             email = ""
             searchWord = val
             date = "";
+            this.setState({searchQuery: searchQuery, searchWord: searchWord, date: date, email: email});
             tickets = await api.getTickets(1 , searchQuery ,searchWord, date, email);
             console.log(this.state.search)
         }
@@ -159,7 +171,13 @@ export class App extends React.PureComponent<{}, AppState> {
     }
 
     loadMore = async () =>{
-        const tickets = await api.getTickets(this.state.pageNumber + 1 , this.state.search);
+        let tickets = undefined;
+        if (this.state.searchQuery === ""){
+            tickets = await api.getTickets(this.state.pageNumber + 1 , this.state.search ,this.state.searchWord, this.state.date , this.state.email);
+        }
+        else {
+            tickets = await api.getTickets(this.state.pageNumber + 1, this.state.searchQuery, this.state.searchWord, this.state.date , this.state.email);
+        }
         this.setState({
             tickets: [...this.state.tickets, ...tickets],
             hiddenCount: 0,
@@ -182,7 +200,7 @@ export class App extends React.PureComponent<{}, AppState> {
             </div> : null}
                 
                 {tickets ? this.renderTickets(tickets) : <h2>Loading..</h2>}
-                {/*<button onClick={this.loadMore}>Load More...</button>*/}
+                <button onClick={this.loadMore}>Load More...</button>
         </main>)
     }
 }
