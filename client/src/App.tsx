@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback } from 'react'
+import React from 'react'
 import './App.scss';
 import {createApiClient, Ticket} from './api';
 import Star from './Components/Star'
@@ -8,6 +8,7 @@ export type AppState = {
     search: string,
     hiddenCount: number,
     pageNumber: number,
+    hasMore: boolean
 }
 
 const api = createApiClient()
@@ -19,6 +20,7 @@ export class App extends React.PureComponent<{}, AppState> {
         hiddenCount: 0,
         pageNumber: 1,
         tickets: [],
+        hasMore: true,
     }
 
     searchDebounce: any = null;
@@ -26,12 +28,12 @@ export class App extends React.PureComponent<{}, AppState> {
     async componentDidMount() {
         this.setState({
             hiddenCount: 0,
-            tickets: await api.getTickets(this.state.pageNumber , this.state.search)
+            tickets: await api.getTickets(this.state.pageNumber , this.state.search),
+            hasMore: await api.hasMore(this.state.pageNumber , this.state.search)
         });
     }
 
     async restore(){
-
         this.setState({
             hiddenCount: 0,
             tickets: this.state.tickets.map((ticket) => { ticket.hidden = false; return ticket})})
@@ -112,8 +114,8 @@ export class App extends React.PureComponent<{}, AppState> {
     onSearch = async (val: string, newPage?: number) => {
 
         this.setState({search: val});
-        const tickets = await api.getTickets(1 ,val);
-        console.log(this.state.search)
+        const tickets = await api.getTickets(1 ,this.state.search);
+        this.setState({hasMore: await api.hasMore(1 , this.state.search)})
         this.setState({
             hiddenCount: 0,
             tickets: tickets,
@@ -124,8 +126,10 @@ export class App extends React.PureComponent<{}, AppState> {
     loadMore = async () =>{
 
         const tickets = await api.getTickets(this.state.pageNumber + 1, this.state.search);
+        const hasMore = await api.hasMore(this.state.pageNumber + 1 , this.state.search);
         this.setState({
             tickets: [...this.state.tickets, ...tickets],
+            hasMore : hasMore,
             hiddenCount: 0,
             pageNumber: this.state.pageNumber +1
         });
@@ -134,7 +138,7 @@ export class App extends React.PureComponent<{}, AppState> {
     render() {
 
         const {tickets} = this.state;
-        return (<main >
+        return (<main>
             <h1>Tickets List</h1>
             <header>
                 <input type="search" placeholder="Search..." onChange={(e) => this.onSearch(e.target.value, this.state.pageNumber)}/>
@@ -144,10 +148,12 @@ export class App extends React.PureComponent<{}, AppState> {
                 <text>({this.state.hiddenCount} hidden tickets - <a onClick={() => this.restore()}>restore</a>)</text>
                 : null}
             </div> : null}
-                
                 {tickets ? this.renderTickets(tickets) : <h2>Loading..</h2>}
-                <button onClick={this.loadMore}>Load More...</button>
-        </main>)
+                <div className='loadMoreButton'>
+                {this.state.hasMore ? <button className='loadMore' onClick={this.loadMore}>Load More...</button> : null }
+                </div>
+        </main>
+        )
     }
 }
 

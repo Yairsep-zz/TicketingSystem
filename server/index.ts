@@ -21,8 +21,9 @@ app.get('/api/tickets', (req, res) => {
 
 	const page = req.query.page || 1;
 	const query = req.query.SearchQuery;
-	const hasMoreData = false;
+	let hasMoreData = false;
 	let FilteredData = tempData;
+	let response = [FilteredData, hasMoreData];
 
 	if (query.startsWith("after:")){
 		const date = query.slice(6,16)
@@ -38,13 +39,19 @@ app.get('/api/tickets', (req, res) => {
 	else if (query.startsWith("from:")){
 		const email = query.slice(5,query.length)
 		FilteredData = FilteredData.filter((t) => (t.userEmail.toLowerCase().includes(email.toLowerCase())));
+
 	}
 	else if (query !==""){
 		FilteredData = FilteredData.filter((t) => ((t.title.toLowerCase().includes(query.toLowerCase()) || (t.content.toLowerCase().includes(query.toLowerCase())))));
-		// console.log("Not undifined", FilteredData)
+
 	}
-	FilteredData = FilteredData.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
-	res.send(FilteredData);
+	if (FilteredData.length > 20){
+		hasMoreData = true;
+	}
+	console.log(hasMoreData)
+	FilteredData = FilteredData.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
+	response = [FilteredData, hasMoreData];
+	res.send(response);
 
 });
 
