@@ -1,167 +1,164 @@
 body {
-	font-family: 'Open Sans', sans-serif;
-	background-color: #f5f6fc;
-	padding-top: 100px;
-	padding: 50px;
+  font-family: 'Open Sans', sans-serif;
+  background-color: #f5f6fc;
+  padding-top: 100px;
+  padding: 50px;
 
 
-	main {
-		max-width: 1000px;
-		margin: 0 auto;
-	}
+  main {
+    max-width: 1000px;
+    margin: 0 auto;
+  }
 
-	h1 {
-		font-weight: 300;
-	}
+  h1 {
+    font-weight: 300;
+  }
 
-	.results {
-		color: #7a92a5;
-		font-size: 12px;
-		margin: 12px 5px;
-	}
-	.loadMoreButton {
-		
-		.loadMore {
-			 display: inline-block;
-			 padding: 0.5em 3em;
-			 border: 0.16em solid #FFFFFF;
-			 margin: 0 0.3em 0.3em 0;
-			 box-sizing: border-box;
-			 text-decoration: none;
-			 text-transform: uppercase;
-			 font-family: 'Roboto', sans-serif;
-			 font-weight: 400;
-			 color: #FFFFFF;
-			 text-align: center;
-			 transition: all 0.15s;
-		}
+  .results {
+    color: #7a92a5;
+    font-size: 12px;
+    margin: 12px 5px;
+  }
 
-		.loadMore:hover {
-			 color: #DDDDDD;
-			 border-color: #DDDDDD;
-		}
+  .loadMoreButton {
 
-		.loadMore:active {
-			 color: #BBBBBB;
-			 border-color: #BBBBBB;
-		}
-	}
+	  .loadMore {
+        float: left;
+        padding: 15px 20px;
+        border-color: #c1e4fe;
+        border-radius: 10px;
+        color: #28445e;
+        background: #daeffe;
+        margin: 4px
+	  }
 
-	header {
-		width: 100%;
-		flex-shrink: 0;
-		border-radius: 6px;
-		background-color: #fff;
-		box-shadow: 0 2px 6px 1px #e1e5e8;
-		margin-bottom: 14px;
-		display: flex;
-		flex-direction: column;
-		border: 1px solid #fff;
-		padding: 10px 20px;
-		position: relative;
+	  .loadMore:hover {
+		  background-color: #627e8e;
+          box-shadow: 0 2px 6px 1px #d3d7da;
+	  }
 
-		input {
-			width: 100%;
-			text-overflow: ellipsis;
-			display: inline-block;
-			color: #20455e;
-			font-size: 14px;
-			outline: 0;
-			transition: border .1s ease;
-			resize: none;
-			border: 1px solid #b6c1cd;
-			border: none;
+	  @media all and (max-width: 30em) {
+		   .loadMore {
+			  display: block;
+			  margin: 0.2em auto;
+		  }
+	  }
+  }
 
-			&::placeholder  {
-				color: #b6c1cd;
-			}
-		}
-	}
+    header {
+      width: 100%;
+      flex-shrink: 0;
+      border-radius: 6px;
+      background-color: #fff;
+      box-shadow: 0 2px 6px 1px #e1e5e8;
+      margin-bottom: 14px;
+      display: flex;
+      flex-direction: column;
+      border: 1px solid #fff;
+      padding: 10px 20px;
+      position: relative;
 
-	a {
-		color: #3899ec;
-		cursor: pointer;
-		font-weight: 500;
-		font-size: 12px;
-	}
+      input {
+        width: 100%;
+        text-overflow: ellipsis;
+        display: inline-block;
+        color: #20455e;
+        font-size: 14px;
+        outline: 0;
+        transition: border .1s ease;
+        resize: none;
+        border: 1px solid #b6c1cd;
+        border: none;
 
-	.tickets {
+        &::placeholder {
+          color: #b6c1cd;
+        }
+      }
+    }
 
-		margin: 0;
-		padding: 0;
-		
-		// .content{
-		// 	overflow: hidden;
-		// 	text-overflow: ellipsis;
-		// 	display: -webkit-box;
-		// 	-webkit-line-clamp: 3;
-		// 	-webkit-box-orient: vertical;
-		// }
-		
-		.ticket {
-			width: 100%;
-			flex-shrink: 0;
-			border-radius: 8px;
-			background-color: #fff;
-			box-shadow: 0 2px 6px 1px #e1e5e8;
-			margin-bottom: 14px;
-			display: flex;
-			flex-direction: column;
-			border: 1px solid #fff;
-			padding: 10px 20px;
-			transition: box-shadow .2s ease-in-out;
-			position: relative;
+    a {
+      color: #3899ec;
+      cursor: pointer;
+      font-weight: 500;
+      font-size: 12px;
+    }
 
-			
+    .tickets {
 
-			&:hover {
-				box-shadow: 0 2px 6px 1px #d3d7da;
-			}
+      margin: 0;
+      padding: 0;
 
-			.hideButton{
-				float: right;
-				color: #20455e;
-			}
+      // .content{
+      // 	overflow: hidden;
+      // 	text-overflow: ellipsis;
+      // 	display: -webkit-box;
+      // 	-webkit-line-clamp: 3;
+      // 	-webkit-box-orient: vertical;
+      // }
 
-			.star{
-				position: absolute;
-				float: right;
-				padding-left: 90%;
-			}
+      .ticket {
+        width: 100%;
+        flex-shrink: 0;
+        border-radius: 8px;
+        background-color: #fff;
+        box-shadow: 0 2px 6px 1px #e1e5e8;
+        margin-bottom: 14px;
+        display: flex;
+        flex-direction: column;
+        border: 1px solid #fff;
+        padding: 10px 20px;
+        transition: box-shadow .2s ease-in-out;
+        position: relative;
 
-			.title {
-				margin: 15px 0;
-				font-size: 16px;
-				font-weight: 400;
-				font-style: normal;
-				color: #20455e;
-			}
 
-			.ticketLabels{
-				float: right;
-				padding: 5px 20px;
-				border-color: #c1e4fe;
-				border-radius: 10px;
-				color: #28445e;
-				background: #daeffe;
-				margin: 4px;
-			}
-			
-			footer {
+        &:hover {
+          box-shadow: 0 2px 6px 1px #d3d7da;
+        }
 
-				display: flex;
-				justify-content: space-between;
+        .hideButton {
+          float: right;
+          color: #20455e;
+        }
 
-				.meta-data {
-					color: #7a92a5;
-					font-size: 12px;
-					margin: 10px 0;
-					flex-shrink: 0;
-				}
-			}
+        .star {
+          position: absolute;
+          float: right;
+          padding-left: 90%;
+        }
 
-			
-		}
-	}
+        .title {
+          margin: 15px 0;
+          font-size: 16px;
+          font-weight: 400;
+          font-style: normal;
+          color: #20455e;
+        }
 
-}
+        .ticketLabels {
+          float: right;
+          padding: 5px 20px;
+          border-color: #c1e4fe;
+          border-radius: 10px;
+          color: #28445e;
+          background: #daeffe;
+          margin: 4px;
+        }
+
+        footer {
+
+          display: flex;
+          justify-content: space-between;
+
+          .meta-data {
+            color: #7a92a5;
+            font-size: 12px;
+            margin: 10px 0;
+            flex-shrink: 0;
+          }
+        }
+
+
+      }
+    }
+
+  }

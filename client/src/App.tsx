@@ -89,28 +89,36 @@ export class App extends React.PureComponent<{}, AppState> {
         }
 
 
+        const comment = (ticket: any) => {
+            ticket.comment = "HelloWorld"
+            const re = api.comment(ticket.id ,ticket.comment)
+        }
+
         return (<ul className='tickets'>
             {filteredTickets.map((ticket) => (!ticket.hidden ? <li key={ticket.id} className='ticket' onMouseOver={() => displayHide(ticket)} onMouseLeave={() => unDisplayHide(ticket)}>
 
-                <div className='hideButton'><text>{ticket.displayHide ? <a className="hideButton" onClick={() => hideTicket(ticket)}>Hide</a> : null}</text></div>
+                <div className='hideButton'><a>{ticket.displayHide ? <text className="hideButton" onClick={() => hideTicket(ticket)}>Hide</text> : null}</a></div>
                 {/*<div className='star'> {!ticket.favourite ? <text onClick={() => setFavourite(ticket)}><BsStar color='black' size='1rem'/></text> : <text onClick={() => unFavourite(ticket)}><BsFillStarFill color='yellow' size='1rem'/></text>}</div>*/}
                 <Star/>
                 <h5 className='title'>{ticket.title}</h5>
+
                 <div className='content'>
+
                 {!longTicket(ticket) ? <p>{ticket.content}</p> : longTicket(ticket) && !ticket.extendText
                     ? <p>{shortContent(ticket)}<div><a className="showMore" onClick={() => seeMore(ticket)}>See More</a></div></p>
                     : <p>{ticket.content}<div><a className="showLess" onClick={() => seeLess(ticket)}>See less</a></div></p>}
+
                 </div>
+
                 <p> {ticket.labels! ? ticket.labels!.map((label) => (<text className='ticketLabels'>{label}</text>)) : null}</p>
-                <footer>
-                    <div className='meta-data'>By {ticket.userEmail} | {new Date(ticket.creationTime).toLocaleString()}</div>
-                </footer></li> : null))}</ul>);
+                <div className='comment'>
+                    {ticket.comment}
+                    <button onClick={() => comment(ticket)}>Comment</button>
+                </div>
+                <footer><div className='meta-data'>By {ticket.userEmail} | {new Date(ticket.creationTime).toLocaleString()}</div></footer></li> : null))}</ul>);
 
     }
-    // onScroll = (event: React.UIEvent<HTMLElement>) => {
-    //     console.log(1111)
-    //     console.log(event.target)
-    // }
+
     onSearch = async (val: string, newPage?: number) => {
 
         this.setState({search: val});
@@ -148,6 +156,7 @@ export class App extends React.PureComponent<{}, AppState> {
                 <text>({this.state.hiddenCount} hidden tickets - <a onClick={() => this.restore()}>restore</a>)</text>
                 : null}
             </div> : null}
+
                 {tickets ? this.renderTickets(tickets) : <h2>Loading..</h2>}
                 <div className='loadMoreButton'>
                 {this.state.hasMore ? <button className='loadMore' onClick={this.loadMore}>Load More...</button> : null }
