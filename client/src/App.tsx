@@ -76,22 +76,7 @@ export class App extends React.PureComponent<{}, AppState> {
             if (ticket.content.length > 370){return true}
             else{return false}
         }
-
-
-        const setFavourite = (ticket : any) =>{
-            const req = api.favourite(ticket.id ,"true")
-            ticket.favourite = true;
-            console.log(ticket.favourite)
-            this.setState({tickets:[...tickets]})
-        }
-
-        const unFavourite = (ticket : any) =>{
-            const req = api.favourite(ticket.id ,"false")
-            ticket.favourite = false;
-            console.log(ticket.favourite)
-            this.setState({tickets:[...tickets]})
-        }
-
+        
         return (<ul className='tickets'>
             {filteredTickets.map((ticket) => (!ticket.hidden ? <li key={ticket.id} className='ticket' onMouseOver={() => displayHide(ticket)} onMouseLeave={() => unDisplayHide(ticket)}>
 
