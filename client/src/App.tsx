@@ -2,7 +2,7 @@ import React from 'react'
 import './App.scss';
 import {createApiClient, Ticket} from './api';
 import Comment from "./Components/Comment";
-import { BsStar , BsFillStarFill} from "react-icons/bs";
+import Star from './Components/Star';
 
 export type AppState = {
     tickets: Ticket[],
@@ -97,9 +97,7 @@ export class App extends React.PureComponent<{}, AppState> {
 
                 <div className='hideButton'><a>{ticket.displayHide ? <div className="hideButton" onClick={() => hideTicket(ticket)}>Hide</div> : null}</a></div>
 
-                <div className='star' >
-                    {!ticket.favourite ? <p onClick={() => setFavourite(ticket)}><BsStar color='black' size='1rem'/></p> : ticket.favourite ? <p onClick={() => unFavourite(ticket)}><BsFillStarFill color='yellow' size='1rem'/></p> : null}
-                </div>
+                <Star ticket_Id={ticket.id} favourite={ticket.favourite}/>
 
                 <h5 className='title'>{ticket.title}</h5>
 
