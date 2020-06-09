@@ -80,7 +80,6 @@ app.put('/api/favouriteTickets', (req, res) => {
 		}
 	})
 	tempData[index].favourite = favourite;
-	console.log(tempData[0].favourite)
 });
 
 app.listen(PORT);
