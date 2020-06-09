@@ -20,29 +20,27 @@ body {
     margin: 12px 5px;
   }
 
-  .loadMoreButton {
-
-	  .loadMore {
-        float: left;
-        padding: 15px 20px;
-        border-color: #c1e4fe;
-        border-radius: 10px;
-        color: #28445e;
-        background: #daeffe;
-        margin: 4px
-	  }
-
-	  .loadMore:hover {
-		  background-color: #627e8e;
-          box-shadow: 0 2px 6px 1px #d3d7da;
-	  }
-
-	  @media all and (max-width: 30em) {
-		   .loadMore {
-			  display: block;
-			  margin: 0.2em auto;
-		  }
-	  }
+  .loadMore {
+    box-shadow: 0px 0px 0px 2px #9fb4f2;
+    background: #7892c2 linear-gradient(to bottom, #7892c2 5%, #476e9e 100%);
+    border-radius:10px;
+    /*border:1px solid #4e6096;*/
+    display:inline-block;
+    cursor:pointer;
+    color:#ffffff;
+    font-family:Arial;
+    font-size:19px;
+    padding:5px 10px;
+    text-decoration:none;
+    text-shadow:0px 1px 0px #283966;
+    margin: 10px;
+  }
+  .loadMore:hover {
+    background: #476e9e linear-gradient(to bottom, #476e9e 5%, #7892c2 100%);
+  }
+  .loadMore:active {
+    position:relative;
+    top:1px;
   }
 
     header {
@@ -88,13 +86,13 @@ body {
       margin: 0;
       padding: 0;
 
-      // .content{
-      // 	overflow: hidden;
-      // 	text-overflow: ellipsis;
-      // 	display: -webkit-box;
-      // 	-webkit-line-clamp: 3;
-      // 	-webkit-box-orient: vertical;
-      // }
+       .longContent{
+       	overflow: hidden;
+       	text-overflow: ellipsis;
+       	display: -webkit-box;
+       	-webkit-line-clamp: 3;
+       	-webkit-box-orient: vertical;
+       }
 
       .ticket {
         width: 100%;

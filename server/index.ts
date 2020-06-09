@@ -34,7 +34,6 @@ app.get('/api/tickets', (req, res) => {
 	else if (query.startsWith("before:")){
 		const date = query.slice(7,17)
 		const searchWord = query.slice(18, query.length)
-		console.log(searchWord)
 		FilteredData = FilteredData.filter((t) => (t.creationTime < new Date(date).getTime() && (t.title.toLowerCase().includes(searchWord.toLowerCase()) || (t.content.toLowerCase().includes(searchWord.toLowerCase())))));
 
 	}
@@ -50,7 +49,6 @@ app.get('/api/tickets', (req, res) => {
 	if (FilteredData.length > 20){
 		hasMoreData = true;
 	}
-	// console.log(hasMoreData)
 	FilteredData = FilteredData.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
 	response = [FilteredData, hasMoreData];
 	res.send(response);
@@ -58,7 +56,6 @@ app.get('/api/tickets', (req, res) => {
 });
 
 app.put('/api/updateTickets', (req, res) => {
-
 
 	const ticket_Id = req.query.ticket_id;
 	const comment = req.query.comment;
@@ -69,12 +66,21 @@ app.put('/api/updateTickets', (req, res) => {
 		}
 	})
 	tempData[index].comment = comment;
-	console.log("ticketId:" , ticket_Id);
-	console.log("comment:" , comment);
-	console.log("ticketIndex:" , index);
-	console.log("updatedComment:" , tempData[index].comment);
-	// res.send(response);
 
+});
+
+app.put('/api/favouriteTickets', (req, res) => {
+
+	const ticket_Id = req.query.ticket_id;
+	const favourite = req.query.favourite;
+	var index = -1;
+	const filterdTickets = tempData.find(function (ticket , i) {
+		if (ticket.id == ticket_Id){
+			index = i;
+		}
+	})
+	tempData[index].favourite = favourite;
+	console.log(tempData[0].favourite)
 });
 
 app.listen(PORT);

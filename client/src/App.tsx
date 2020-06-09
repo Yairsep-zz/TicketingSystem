@@ -1,7 +1,8 @@
 import React from 'react'
 import './App.scss';
 import {createApiClient, Ticket} from './api';
-import Star from './Components/Star'
+import Comment from "./Components/Comment";
+import { BsStar , BsFillStarFill} from "react-icons/bs";
 
 export type AppState = {
     tickets: Ticket[],
@@ -36,16 +37,15 @@ export class App extends React.PureComponent<{}, AppState> {
     async restore(){
         this.setState({
             hiddenCount: 0,
-            tickets: this.state.tickets.map((ticket) => { ticket.hidden = false; return ticket})})
+            tickets: await api.getTickets(this.state.pageNumber , this.state.search)
+        });
+        console.log("stat:" , this.state.tickets[0].favourite)
     }
 
 
     renderTickets = (tickets: Ticket[]) => {
 
         const filteredTickets = tickets
-        //     .filter((t) => (t.title.toLowerCase() + t.content.toLowerCase()).includes(this.state.search.toLowerCase()) &&
-        //         !t.hidden);
-
         const hideTicket = (ticket : any) =>{
             ticket.hidden = true;
             this.setState({tickets:[...tickets]})
@@ -73,55 +73,55 @@ export class App extends React.PureComponent<{}, AppState> {
         }
 
         const longTicket = (ticket : any) =>{
-            const lines = ticket.content.split(/\r\n|\r|\n/)
-            if (lines.length > 3){
-                return true
-            }
-            else{
-                return false
-            }
-        }
-
-        const shortContent = (ticket : any) =>{
-            const lines = ticket.content.split(/\r\n|\r|\n/)
-            const maxlength = ticket.content
-            return ticket.content.slice(0 , 500)
+            if (ticket.content.length > 370){return true}
+            else{return false}
         }
 
 
-        const comment = (ticket: any) => {
-            ticket.comment = "HelloWorld"
-            const re = api.comment(ticket.id ,ticket.comment)
+        const setFavourite = (ticket : any) =>{
+            const req = api.favourite(ticket.id ,"true")
+            ticket.favourite = true;
+            console.log(ticket.favourite)
+            this.setState({tickets:[...tickets]})
+        }
+
+        const unFavourite = (ticket : any) =>{
+            const req = api.favourite(ticket.id ,"false")
+            ticket.favourite = false;
+            console.log(ticket.favourite)
+            this.setState({tickets:[...tickets]})
         }
 
         return (<ul className='tickets'>
             {filteredTickets.map((ticket) => (!ticket.hidden ? <li key={ticket.id} className='ticket' onMouseOver={() => displayHide(ticket)} onMouseLeave={() => unDisplayHide(ticket)}>
 
-                <div className='hideButton'><a>{ticket.displayHide ? <text className="hideButton" onClick={() => hideTicket(ticket)}>Hide</text> : null}</a></div>
-                {/*<div className='star'> {!ticket.favourite ? <text onClick={() => setFavourite(ticket)}><BsStar color='black' size='1rem'/></text> : <text onClick={() => unFavourite(ticket)}><BsFillStarFill color='yellow' size='1rem'/></text>}</div>*/}
-                <Star/>
+                <div className='hideButton'><a>{ticket.displayHide ? <div className="hideButton" onClick={() => hideTicket(ticket)}>Hide</div> : null}</a></div>
+
+                <div className='star' >
+                    {!ticket.favourite ? <p onClick={() => setFavourite(ticket)}><BsStar color='black' size='1rem'/></p> : ticket.favourite ? <p onClick={() => unFavourite(ticket)}><BsFillStarFill color='yellow' size='1rem'/></p> : null}
+                </div>
+
                 <h5 className='title'>{ticket.title}</h5>
 
                 <div className='content'>
-
-                {!longTicket(ticket) ? <p>{ticket.content}</p> : longTicket(ticket) && !ticket.extendText
-                    ? <p>{shortContent(ticket)}<div><a className="showMore" onClick={() => seeMore(ticket)}>See More</a></div></p>
-                    : <p>{ticket.content}<div><a className="showLess" onClick={() => seeLess(ticket)}>See less</a></div></p>}
-
+                    {!longTicket(ticket) ? <p>{ticket.content}</p> :
+                        longTicket(ticket) &&!ticket.extendText ? <div><div className='longContent'> {ticket.content}</div><a className="showMore" onClick={() => seeMore(ticket)}>See More</a></div> :
+                            <div>{ticket.content}<div><a className="showLess" onClick={() => seeLess(ticket)}>See less</a></div></div> }
                 </div>
 
-                <p> {ticket.labels! ? ticket.labels!.map((label) => (<text className='ticketLabels'>{label}</text>)) : null}</p>
-                <div className='comment'>
-                    {ticket.comment}
-                    <button onClick={() => comment(ticket)}>Comment</button>
-                </div>
+                <div> {ticket.labels! ? ticket.labels!.map((label) => (<div key={ticket.labels!.indexOf(label)} className='ticketLabels'>{label}</div>)) : null}</div>
+
+                <Comment ticket_Id={ticket.id} comment={ticket.comment}/>
                 <footer><div className='meta-data'>By {ticket.userEmail} | {new Date(ticket.creationTime).toLocaleString()}</div></footer></li> : null))}</ul>);
-
     }
 
     onSearch = async (val: string, newPage?: number) => {
-
-        this.setState({search: val});
+        clearTimeout(this.searchDebounce);
+        this.searchDebounce = setTimeout(async () => {
+            this.setState({
+                search: val
+            });
+        }, 300);
         const tickets = await api.getTickets(1 ,this.state.search);
         this.setState({hasMore: await api.hasMore(1 , this.state.search)})
         this.setState({
@@ -135,6 +135,7 @@ export class App extends React.PureComponent<{}, AppState> {
 
         const tickets = await api.getTickets(this.state.pageNumber + 1, this.state.search);
         const hasMore = await api.hasMore(this.state.pageNumber + 1 , this.state.search);
+        await this.restore();
         this.setState({
             tickets: [...this.state.tickets, ...tickets],
             hasMore : hasMore,

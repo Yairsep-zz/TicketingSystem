@@ -18,6 +18,7 @@ export type ApiClient = {
 	getTickets: (pageNumber:number, searchQuery: string) => Promise<Ticket[]>,
 	hasMore: (pageNumber:number, searchQuery: string) => Promise<boolean>,
 	comment: (ticket_id: string, comment: string) => Promise<boolean>,
+	favourite: (ticket_id: string, favourite: string) => Promise<boolean>,
 }
 
 export const createApiClient = (): ApiClient => {
@@ -37,8 +38,11 @@ export const createApiClient = (): ApiClient => {
 		comment: (ticket_id: string, comment: string) => {
 			const queryString = "http://localhost:3232/api/updateTickets" + "?ticket_id="+ticket_id+ "&comment="+comment;
 			return axios.put(queryString).then((res) => res.data);
+		},
+		favourite: (ticket_id: string, favourite: string) => {
+			const queryString = "http://localhost:3232/api/favouriteTickets" + "?ticket_id="+ticket_id+ "&favourite="+favourite;
+			return axios.put(queryString).then((res) => res.data);
 		}
 	}
 }
 
-// http://localhost:3232/api/updateTickets?ticket_id=81a885d6-8f68-5bc0-bbbc-1c7b32e4b4e4&comment=HelloWorld
