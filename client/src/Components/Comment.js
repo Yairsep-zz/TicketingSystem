@@ -24,7 +24,10 @@ function Comment(props){
     }
 
     return (<div>
-        {!reply ? <button className='comment' onClick={() => handleReply()}>Reply</button> : !status ? <div><input type='text' name="comment" onChange={handleChange} placeholder="Write your comment:"/><button className='comment' onClick={handleSubmit}>Comment</button></div>: <div><h3>Comment:</h3>{comment}</div> }
+        {!reply ? <button className='comment' onClick={() => handleReply()}>Reply</button> :
+         !status ? <div><textarea rows="4" cols="50" type='text' name="comment" onChange={handleChange} 
+         placeholder="Write your comment:"/><br/><button className='comment' onClick={handleSubmit}>Comment</button></div>
+         : <div><h3>Comment:</h3>{comment}</div> }
     </div>)
 }
 

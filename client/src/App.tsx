@@ -4,6 +4,7 @@ import {createApiClient, Ticket} from './api';
 import Comment from "./Components/Comment";
 import Star from './Components/Star';
 
+
 export type AppState = {
     tickets: Ticket[],
     search: string,
@@ -35,11 +36,12 @@ export class App extends React.PureComponent<{}, AppState> {
     }
 
     async restore(){
+        //TODO: Check the functionality
+        this.state.tickets.map(ticket => ticket.hidden = false)
         this.setState({
             hiddenCount: 0,
-            tickets: await api.getTickets(this.state.pageNumber , this.state.search)
+            tickets: this.state.tickets
         });
-        console.log("stat:" , this.state.tickets[0].favourite)
     }
 
 
@@ -47,8 +49,10 @@ export class App extends React.PureComponent<{}, AppState> {
 
         const filteredTickets = tickets
         const hideTicket = (ticket : any) =>{
-            ticket.hidden = true;
-            this.setState({tickets:[...tickets]})
+            // ticket.hidden = true;
+            const cTicket = this.state.tickets.find(t => t.id === ticket.id); 
+            cTicket!.hidden = true;
+            this.setState({tickets:[...this.state.tickets]})
             this.setState({hiddenCount: this.state.hiddenCount +1})
         }
 
@@ -92,7 +96,7 @@ export class App extends React.PureComponent<{}, AppState> {
                             <div>{ticket.content}<div><a className="showLess" onClick={() => seeLess(ticket)}>See less</a></div></div> }
                 </div>
 
-                <div> {ticket.labels! ? ticket.labels!.map((label) => (<div key={ticket.labels!.indexOf(label)} className='ticketLabels'>{label}</div>)) : null}</div>
+                <div> {ticket.labels && ticket.labels.map((label, index) => (<div key={index} className='ticketLabels'>{label}</div>))}</div>
 
                 <Comment ticket_Id={ticket.id} comment={ticket.comment}/>
                 <footer><div className='meta-data'>By {ticket.userEmail} | {new Date(ticket.creationTime).toLocaleString()}</div></footer></li> : null))}</ul>);
@@ -104,7 +108,13 @@ export class App extends React.PureComponent<{}, AppState> {
             this.setState({
                 search: val
             });
+            this.getFilteredItems();
         }, 300);
+      
+      
+    }
+
+     getFilteredItems = async()=>{
         const tickets = await api.getTickets(1 ,this.state.search);
         this.setState({hasMore: await api.hasMore(1 , this.state.search)})
         this.setState({
@@ -118,11 +128,12 @@ export class App extends React.PureComponent<{}, AppState> {
 
         const tickets = await api.getTickets(this.state.pageNumber + 1, this.state.search);
         const hasMore = await api.hasMore(this.state.pageNumber + 1 , this.state.search);
-        await this.restore();
+        // TODO: CHECK IF NEEDED RESTORE
+        // await this.restore();
         this.setState({
             tickets: [...this.state.tickets, ...tickets],
             hasMore : hasMore,
-            hiddenCount: 0,
+         
             pageNumber: this.state.pageNumber +1
         });
     }
@@ -136,14 +147,16 @@ export class App extends React.PureComponent<{}, AppState> {
                 <input type="search" placeholder="Search..." onChange={(e) => this.onSearch(e.target.value, this.state.pageNumber)}/>
             </header>
 
-            {tickets ? <div className='results'>Showing {tickets.length - this.state.hiddenCount} results {this.state.hiddenCount > 0 ?
+            {tickets && 
+            <div className='results'>Showing {tickets.length - this.state.hiddenCount} results {
+                this.state.hiddenCount > 0 &&
                 <text>({this.state.hiddenCount} hidden tickets - <a onClick={() => this.restore()}>restore</a>)</text>
-                : null}
-            </div> : null}
+            }
+            </div> }
 
                 {tickets ? this.renderTickets(tickets) : <h2>Loading..</h2>}
                 <div className='loadMoreButton'>
-                {this.state.hasMore ? <button className='loadMore' onClick={this.loadMore}>Load More...</button> : null }
+                {this.state.hasMore && <button className='loadMore' onClick={this.loadMore}>Load More...</button>}
                 </div>
         </main>
         )
