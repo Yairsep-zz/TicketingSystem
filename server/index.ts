@@ -50,6 +50,9 @@ app.get('/api/tickets', (req, res) => {
 		hasMoreData = true;
 	}
 	FilteredData = FilteredData.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
+	if (tempData[tempData.length-1] === FilteredData[FilteredData.length-1]){
+		hasMoreData =false;
+	}
 	response = [FilteredData, hasMoreData];
 	res.send(response);
 
