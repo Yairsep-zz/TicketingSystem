@@ -106,7 +106,7 @@ export class App extends React.PureComponent<{}, AppState> {
             await this.getFilteredItems();
         }, 300);
     }
-
+//
     getFilteredItems = async()=>{
         const tickets = await api.getTickets(1 ,this.state.search);
         this.setState({hasMore: await api.hasMore(1 , this.state.search)})
