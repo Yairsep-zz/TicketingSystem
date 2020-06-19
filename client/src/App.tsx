@@ -37,7 +37,8 @@ export class App extends React.PureComponent<{}, AppState> {
     async restore(){
         this.setState({
             hiddenCount: 0,
-            tickets: await api.getTickets(this.state.pageNumber , this.state.search)
+            pageNumber: 1,
+            tickets: await api.getTickets(1 , this.state.search)
         });
     }
 
@@ -87,8 +88,8 @@ export class App extends React.PureComponent<{}, AppState> {
 
                 <div className='content'>
                     {!longTicket(ticket) ? <p>{ticket.content}</p> :
-                        longTicket(ticket) &&!ticket.extendText ? <div><div className='longContent'> {ticket.content}</div><a className="showMore" onClick={() => seeMore(ticket)}>See More</a></div> :
-                            <div>{ticket.content}<div><a className="showLess" onClick={() => seeLess(ticket)}>See less</a></div></div> }
+                        !ticket.extendText ? <div><div className='longContent'> {ticket.content}</div><a className="showMore" onClick={() => seeMore(ticket)}>See More</a></div>
+                            : <div>{ticket.content}<div><a className="showLess" onClick={() => seeLess(ticket)}>See less</a></div></div>}
                 </div>
 
                 <div> {ticket.labels && ticket.labels.map((label, index) => (<div key={index} className='ticketLabels'>{label}</div>))}</div>
