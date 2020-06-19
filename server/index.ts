@@ -49,10 +49,8 @@ app.get('/api/tickets', (req, res) => {
 	if (FilteredData.length > 20){
 		hasMoreData = true;
 	}
-	console.log(hasMoreData)
-	FilteredData = FilteredData.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
 
-	console.log(tempData[tempData.length-1].id)
+	FilteredData = FilteredData.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
 	if (tempData[tempData.length-1] === FilteredData[FilteredData.length-1]){
 		hasMoreData =false;
 	}
