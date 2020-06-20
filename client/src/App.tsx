@@ -35,17 +35,27 @@ export class App extends React.PureComponent<{}, AppState> {
     }
 
     async restore(){
+        let tickets = await this.getAllTickets(this.state.pageNumber)
         this.setState({
             hiddenCount: 0,
-            pageNumber: 1,
-            tickets: await api.getTickets(1 , this.state.search)
+            tickets: tickets
         });
+    }
+
+    async getAllTickets(pageNumber : number){
+        let pageNum;
+        let tickets = await api.getTickets(1 , this.state.search)
+        for (pageNum =2 ; pageNum <= pageNumber ; pageNum++){
+            tickets = [...tickets , ...await api.getTickets(pageNum , this.state.search)]
+        }
+        return tickets;
     }
 
 
     renderTickets = (tickets: Ticket[]) => {
 
         const filteredTickets = tickets
+
         const hideTicket = (ticket : any) =>{
             ticket.hidden = true;
             this.setState({tickets:[...tickets]})
@@ -136,10 +146,10 @@ export class App extends React.PureComponent<{}, AppState> {
 
         const {tickets} = this.state;
         return (<main>
-            <h1>Tickets List</h1>
-            <header>
-                <input type="search" placeholder="Search..." onChange={(e) => this.onSearch(e.target.value, this.state.pageNumber)}/>
-            </header>
+                <h1>Tickets List</h1>
+                <header>
+                    <input type="search" placeholder="Search..." onChange={(e) => this.onSearch(e.target.value, this.state.pageNumber)}/>
+                </header>
 
                 {tickets &&
                 <div className='results'>Showing {tickets.length - this.state.hiddenCount} results {
@@ -151,7 +161,7 @@ export class App extends React.PureComponent<{}, AppState> {
                 <div className='loadMoreButton'>
                     {this.state.hasMore && <button className='loadMore' onClick={this.loadMore}>Load More...</button>}
                 </div>
-        </main>
+            </main>
         )
     }
 }
