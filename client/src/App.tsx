@@ -77,6 +77,7 @@ export class App extends React.PureComponent<{}, AppState> {
             else{return false}
         }
 
+
         return (<ul className='tickets'>
             {filteredTickets.map((ticket) => (!ticket.hidden ? <li key={ticket.id} className='ticket' onMouseOver={() => displayHide(ticket)} onMouseLeave={() => unDisplayHide(ticket)}>
 
