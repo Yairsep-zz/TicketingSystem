@@ -75,7 +75,7 @@ app.put('/api/updateTickets', (req, res) => {
 app.put('/api/favouriteTickets', (req, res) => {
 
 	const ticket_Id = req.query.ticket_id;
-	const favourite = req.query.favourite;
+	const favourite = (req.query.favourite === "true")
 	var index = -1;
 	const filterdTickets = tempData.find(function (ticket , i) {
 		if (ticket.id == ticket_Id){

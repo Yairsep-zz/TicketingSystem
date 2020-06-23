@@ -91,8 +91,7 @@ export class App extends React.PureComponent<{}, AppState> {
         return (<ul className='tickets'>
             {filteredTickets.map((ticket) => (!ticket.hidden ? <li key={ticket.id} className='ticket' onMouseOver={() => displayHide(ticket)} onMouseLeave={() => unDisplayHide(ticket)}>
 
-                <div className='hideButton'><a>{ticket.displayHide ? <div className="hideButton" onClick={() => hideTicket(ticket)}>Hide</div> : null}</a></div>
-
+                <div className="hidden">{ticket.displayHide && <a className="hideButton" onClick={() => hideTicket(ticket)}>Hide</a>}</div>
                 <Star ticket_Id={ticket.id} favourite={ticket.favourite}/>
 
                 <h5 className='title'>{ticket.title}</h5>
@@ -137,7 +136,6 @@ export class App extends React.PureComponent<{}, AppState> {
         this.setState({
             tickets: [...this.state.tickets, ...tickets],
             hasMore : hasMore,
-            hiddenCount: 0,
             pageNumber: this.state.pageNumber +1
         });
     }
@@ -152,8 +150,8 @@ export class App extends React.PureComponent<{}, AppState> {
                 </header>
 
                 {tickets &&
-                <div className='results'>Showing {tickets.length - this.state.hiddenCount} results {
-                    this.state.hiddenCount > 0 &&
+                <div className='results'>Showing {tickets.length - this.state.hiddenCount} results
+                    {this.state.hiddenCount > 0 &&
                     <text>({this.state.hiddenCount} hidden tickets - <a onClick={() => this.restore()}>restore</a>)</text>}
                 </div>}
 
